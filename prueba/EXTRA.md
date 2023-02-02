@@ -25,9 +25,10 @@ la [parte obligatoria](README.md#parte-obligatoria).
 Tienes estas opciones:
 
 2.1. Haz la "Parte Opcional" [(Hacker Edition)](README.md#parte-opcional-hacker-edition).
-Enfócate en los dos puntos principales: _cargar la data usando [`fetch`](https://developer.mozilla.org/es/docs/Web/API/Fetch_API)_
-y/o _agregar gráficas con [`Chart.js`](https://www.chartjs.org/)
-o [`Google Charts`](https://developers.google.com/chart/)_. Si ya hiciste esto,
+Enfócate en los dos puntos principales: _cargar la data usando [fetch](https://developer.mozilla.org/es/docs/Web/API/Fetch_API)_
+Enfócate en los dos puntos principales: _cargar la data usando [fetch](https://developer.mozilla.org/es/docs/Web/API/Fetch_API)_
+y/o _agregar gráficas con [Chart.js](https://www.chartjs.org/)
+o [Google Charts](https://developers.google.com/chrt/)_. Si ya hiciste esto,
 pasa a las siguientes opciones (obviamente).
 
 2.2. Si quieres explorar un poco más sobre el Diseño de Experiencia de Usuario
@@ -47,7 +48,7 @@ otro "Producto". Por ejemplo, si hiciste una visualización con datos del
 Banco Mundial, puedes aplicar todo lo aprendido para, esta vez, hacer una
 sobre Pokémon.
 
-2.4 [Refactoriza](https://es.wikipedia.org/wiki/Refactorizaci%C3%B3n) tu código
+2.4 [Refactoriza](https://es.wikipedia.org/wiki/Refactorizaci%C3%B3) tu código
 para aumentar la cobertura de _tests_ (incluyendo pruebas para componentes de
 interfaz).
 

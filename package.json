@@ -2,6 +2,7 @@
   "name": "md-links-carov",
   "version": "0.1.0",
   "description": "Librería para buscar links, verificar el estado de validez y obtener estadísticas de archivos tipo md",
+  "main": "index.js",
   "author": {
     "name": "Carolina Velásquez",
     "email": "carolina.velasquez.rodriguez@gmail.com"
@@ -27,7 +28,11 @@
   "scripts": {
     "test": "jest --coverage"
   },
+  "bin": {
+    "md-links": "./cli.js"
+  },
   "dependencies": {
-    "get-urls": "^11.0.0"
+    "axios": "^1.2.5",
+    "colors": "^1.4.0"
   }
 }
