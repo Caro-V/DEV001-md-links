@@ -1,6 +1,10 @@
+/* eslint-disable consistent-return */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-plusplus */
 /* eslint-disable no-loop-func */
 /* eslint-disable prefer-const */
 /* eslint-disable max-len */
+require('colors');
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
@@ -30,7 +34,7 @@ const isItMarkdown = (inputPath) => path.extname(inputPath) === '.md';
 
 // leer el archivo md
 const readFile = (inputPath) => fs.readFileSync(inputPath, 'utf8');
-// const leer = console.log(readFile('/Users/carolinavelasquez/Desktop/Laboratoria/DEV001-md-links/prueba/EXTRA.md'));
+// console.log(readFile('prueba/EXTRA.md'));
 
 const findLinks = (content, inputPath) => {
   const regExp = /\[(.+)\]\((https?:\/\/.+)\)/gi;
@@ -47,15 +51,14 @@ const findLinks = (content, inputPath) => {
   }
   return arrayObjects;
 };
-
 // console.log(findLinks(readFile('/Users/carolinavelasquez/Desktop/Laboratoria/DEV001-md-links/prueba/EXTRA.md'), '/Users/carolinavelasquez/Desktop/Laboratoria/DEV001-md-links/prueba/EXTRA.md'));
-// console.log(prueba);
+// console.log(findLinks(leer, 'README.md'));
+
 const linkValidation = (arr) => {
   let arrayPromises = [];
 
   for (let i = 0; i < arr.length; i++) {
     const object = arr[i];
-    console.log(object);
     let links = axios.get(object.href)
       .then((res) => ({
         href: res.config.url,
@@ -65,9 +68,10 @@ const linkValidation = (arr) => {
         message: 'ok',
       }))
       .catch((error) => {
+        // console.log(error)
         if ('response' in error) {
           return {
-            href: error.response.url,
+            href: object.href,
             text: object.text,
             file: object.file,
             status: error.response.status,
@@ -75,52 +79,65 @@ const linkValidation = (arr) => {
           };
         }
       });
-    console.log(arrayPromises.push(links));
+    arrayPromises.push(links);
   }
-  return console.log(arrayPromises);
+  return Promise.all(arrayPromises);
 };
-// console.log(linkValidation(findLinks(readFile('/Users/carolinavelasquez/Desktop/Laboratoria/DEV001-md-links/prueba/EXTRA.md'), '/Users/carolinavelasquez/Desktop/Laboratoria/DEV001-md-links/prueba/EXTRA.md')));
+
+// TOTAL DE LINKS
+const totalStats = (links) => {
+  const totalLinks = links.length;
+  return totalLinks;
+};
+// console.log(totalStats(linksEjem)); // 4
+
+// LINKS ÚNICOS
+const uniqueStats = (links) => {
+  const uniqueLinks = [...new Set(links.map((link) => link.href))];
+  return uniqueLinks.length;
+};
+// console.log(uniqueStats(linksEjem)); // 3
+
+// LINKS ROTOS
+const brokenStats = (links) => {
+  const brokenLinks = links.filter((link) => link.message === 'fail');
+  return brokenLinks.length;
+};
+// console.log(brokenStats(linksEjem)); // 1
 
 /* ------------------------------- FUNCIÓN MDLINKS -------------------------------*/
-const mdLinks = (inputPath, options = { validate: false }) => new Promise((resolve, reject) => {
+const mdLinks = (inputPath, options = { }) => new Promise((resolve, reject) => {
   if (doesPathExist(inputPath)) { // identificar si la ruta existe
-    console.log('The path exists');
+    // console.log('The path exists');
     if (!isPathAbsolute(inputPath)) {
-      console.log('The path is RELATIVE');
+      // console.log('The path is RELATIVE');
       const absolutePath = turnIntoAbsolute(inputPath);
-      console.log(`The relative path was turned into absolute ${absolutePath}`);
-      if (isItFile(inputPath)) {
-        console.log('It is a file');
+      // console.log(`The relative path was turned into absolute ${absolutePath}`);
+      if (isItFile(absolutePath)) {
+        // console.log('It is a file');
         if (isItMarkdown(inputPath)) { // si es un archivo y es md, extrae los links
-          console.log('It is a markdown file');
+          // console.log('It is a markdown file');
           let content = readFile(inputPath);
-          if (content !== '') {
-            const arrayLinks = findLinks(content, inputPath); // si encuentra archivos md, crear un arreglo de mds
-            // console.log(arrayLinks);
-            if (options.validate === false) {
-              resolve(arrayLinks);
-            } else {
-              let arrayPromise = linkValidation(arrayLinks);
-              // console.log(arrayPromise);
-              console.log(Promise.all(arrayPromise).then((resultado) => {
-                resolve(resultado);
-              }));
+          if (content !== '' && !isItMarkdown(inputPath)) {
+            const arrayObjects = findLinks(content, inputPath); // si encuentra archivos md, crear un arreglo de mds
+            if (arrayObjects !== '' && options.validate) {
+              resolve(linkValidation(arrayObjects));
+            } else if (arrayObjects !== '' && options.validate !== true) {
+              resolve(arrayObjects);
             }
           } else {
-            reject(new Error('There IS NOT links in this file')); // si el arreglo es vacío, rechazamos la promesa diciendo que no hay archivos md
+            reject(new Error('There IS NOT links in this file'.bgRed)); // si el arreglo es vacío, rechazamos la promesa diciendo que no hay archivos md
           }
         } else {
-          reject(new Error('It IS NOT an .md file'));
+          reject(new Error('It IS NOT an .md file'.bgRed));
         }
       } else {
-        reject(new Error('It IS NOT a file'));
+        reject(new Error('It IS NOT a file'.bgRed));
       }
     }
   } else {
-    reject(new Error('The path DOES NOT exist')); // si no existe la ruta, se rechaza la promesa
+    reject(new Error('The path DOES NOT exist'.bgRed)); // si no existe la ruta, se rechaza la promesa
   }
-
-  // si es un directorio(?) y tiene archivos, extrae todos los archivos md y crea un arreglo de mds
 });
 
 module.exports = {
@@ -132,6 +149,8 @@ module.exports = {
   readFile,
   findLinks,
   mdLinks,
+  totalStats,
+  uniqueStats,
+  brokenStats,
+  linkValidation,
 };
-
-// if (content !== '' && findLinks(content, inputPath).length !== 0)

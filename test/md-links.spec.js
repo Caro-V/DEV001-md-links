@@ -1,3 +1,9 @@
+/* eslint-disable no-undef */
+/* eslint-disable max-len */
+// Mocking Axios
+// jest.mock('axios');
+require('axios');
+
 const {
   doesPathExist,
   isPathAbsolute,
@@ -7,7 +13,11 @@ const {
   readFile,
   findLinks,
   mdLinks,
-} = require('../index.js');
+  totalStats,
+  uniqueStats,
+  brokenStats,
+  linkValidation,
+} = require('../index');
 
 // *** VERIFIES IF THE PATH EXISTS ***
 describe('doesPathExist', () => {
@@ -96,65 +106,178 @@ describe('readFile', () => {
   });
 });
 
+const path = '/Users/carolinavelasquez/Desktop/Laboratoria/DEV001-md-links/prueba/EXTRA.md';
+
+const links = [
+  {
+    href: 'https://www.theodysseyonline.com/road-trips-worthwhil',
+    text: 'Fuente',
+    file: path,
+  },
+  {
+    href: 'https://es.wikipedia.org/wiki/Refactorizaci%C3%B3',
+    text: 'Refactoriza',
+    file: path,
+  },
+  {
+    href: 'https://assets-auto.rbl.ms/5fefc7fee587f0e4aca6794810f346d3c555463eed4e21eaa015d6fc9e6bcb5d',
+    text: 'Travel pic',
+    file: path,
+  },
+  {
+    href: 'https://assets-auto.rbl.ms/5fefc7fee587f0e4aca6794810f346d3c555463eed4e21eaa015d6fc9e6bcb5d',
+    text: 'Travel pic',
+    file: path,
+  },
+];
+
+const arrResponse = [
+  {
+    href: 'https://assets-auto.rbl.ms/5fefc7fee587f0e4aca6794810f346d3c555463eed4e21eaa015d6fc9e6bcb5d',
+    text: 'Travel pic',
+    file: 'prueba/EXTRA.md',
+    status: 200,
+    message: 'ok',
+  },
+];
+const arrayLinks = [{
+  href: 'https://assets-auto.rbl.ms/5fefc7fee587f0e4aca6794810f346d3c555463eed4e21eaa015d6fc9e6bcb5d',
+  text: 'Travel pic',
+  file: 'prueba/EXTRA.md',
+}];
+
+const arrResponseFail = [
+  {
+    href: 'https://assets-auto.rbl.ms/5fefc7fee587f0e4aca6794810f346d3c555463eed4e21eaa015d6fc9e6bcb5',
+    text: 'Travel pic',
+    file: 'prueba/EXTRA.md',
+    status: 403,
+    message: 'fail',
+  },
+];
+const arrayLinksFail = [{
+  href: 'https://assets-auto.rbl.ms/5fefc7fee587f0e4aca6794810f346d3c555463eed4e21eaa015d6fc9e6bcb5',
+  text: 'Travel pic',
+  file: 'prueba/EXTRA.md',
+}];
+
 // *** FINDS THE LINKS INSIDE AN .md FILE ***
 describe('findLinks', () => {
   it('should be a function', () => {
     expect(typeof findLinks).toBe('function');
   });
   it('should find the links', () => {
-    const content = `Texto Ejemplo [Fuente](https://www.theodysseyonline.com/road-trips-worthwhile) 
-    Texto Ejemplo [Refactoriza](https://es.wikipedia.org/wiki/Refactorizaci%C3%B3n) 
+    const content = `Texto Ejemplo [Fuente](https://www.theodysseyonline.com/road-trips-worthwhil) 
+    Texto Ejemplo [Refactoriza](https://es.wikipedia.org/wiki/Refactorizaci%C3%B3) 
+    Texto Ejemplo [Travel pic](https://assets-auto.rbl.ms/5fefc7fee587f0e4aca6794810f346d3c555463eed4e21eaa015d6fc9e6bcb5d)
     Texto Ejemplo [Travel pic](https://assets-auto.rbl.ms/5fefc7fee587f0e4aca6794810f346d3c555463eed4e21eaa015d6fc9e6bcb5d)`;
-    // [
-    //   [
-    //     '[Fuente](https://www.theodysseyonline.com/road-trips-worthwhile)',
-    //     'Fuente',
-    //   ],
-    //   [
-    //     '[Refactoriza](https://es.wikipedia.org/wiki/Refactorizaci%C3%B3n',
-    //     'Refactoriza',
-    //   ],
-    //   [
-    //     '[Travel pic](https://assets-auto.rbl.ms/5fefc7fee587f0e4aca6794810f346d3c555463eed4e21eaa015d6fc9e6bcb5d)',
-    //     'Travel pic',
-    //   ],
-    // ];
-    const path = '/Users/carolinavelasquez/Desktop/Laboratoria/DEV001-md-links/prueba/EXTRA.md';
-
-    const links = [
-      {
-        href: 'https://www.theodysseyonline.com/road-trips-worthwhile',
-        text: 'Fuente',
-        file: path,
-      },
-      {
-        href: 'https://es.wikipedia.org/wiki/Refactorizaci%C3%B3n',
-        text: 'Refactoriza',
-        file: path,
-      },
-      {
-        href: 'https://assets-auto.rbl.ms/5fefc7fee587f0e4aca6794810f346d3c555463eed4e21eaa015d6fc9e6bcb5d',
-        text: 'Travel pic',
-        file: path,
-      },
-    ];
     expect(findLinks(content, path)).toStrictEqual(links);
   });
 });
 
+// *** CANTIDAD DE LINKS ***
+describe('totalStats', () => {
+  it('should be a function', () => {
+    expect(typeof totalStats).toBe('function');
+  });
+  it('should count the total of links', () => {
+    expect(totalStats(links)).toBe(4);
+  });
+});
+
+// *** LINKS ÚNICOS ***
+describe('uniqueStats', () => {
+  it('should be a function', () => {
+    expect(typeof uniqueStats).toBe('function');
+  });
+  it('should count the unique links', () => {
+    expect(uniqueStats(links)).toBe(3);
+  });
+});
+
+// *** LINKS ROTOS ***
+describe('brokenStats', () => {
+  it('should be a function', () => {
+    expect(typeof brokenStats).toBe('function');
+  });
+  it('should count the broken links', () => {
+    expect(brokenStats(arrResponseFail)).toBe(1);
+  });
+});
+
+// *** VALIDA LOS LINKS ***
+describe('linkValidation', () => {
+  it('should be a function', () => {
+    expect(typeof linkValidation).toBe('function');
+  });
+  it('should return status: 200 and message "ok" ', () => {
+    linkValidation(arrayLinks).then(((response) => {
+      expect(response).toEqual(arrResponse);
+    }));
+  });
+  it('should return status: 404 and message "fail" ', () => {
+    linkValidation(arrayLinksFail).then(((response) => {
+      expect(response).toEqual(arrResponseFail);
+    }));
+  });
+});
+
 // *** MDLINKS ***
+const arrayResult = [
+  {
+    href: 'https://assets-auto.rbl.ms/5fefc7fee587f0e4aca6794810f346d3c555463eed4e21eaa015d6fc9e6bcb5d',
+    text: 'Travel pic',
+    file: 'prueba/EXTRA.md',
+  },
+  {
+    href: 'https://www.theodysseyonline.com/road-trips-worthwhile',
+    text: 'Fuente',
+    file: 'prueba/EXTRA.md',
+  },
+  {
+    href: 'https://developer.mozilla.org/es/docs/Web/API/Fetch_API',
+    text: 'fetch',
+    file: 'prueba/EXTRA.md',
+  },
+  {
+    href: 'https://developer.mozilla.org/es/docs/Web/API/Fetch_API',
+    text: 'fetch',
+    file: 'prueba/EXTRA.md',
+  },
+  {
+    href: 'https://www.chartjs.org/',
+    text: 'Chart.js',
+    file: 'prueba/EXTRA.md',
+  },
+  {
+    href: 'https://developers.google.com/chrt/',
+    text: 'Google Charts',
+    file: 'prueba/EXTRA.md',
+  },
+  {
+    href: 'https://es.wikipedia.org/wiki/Refactorizaci%C3%B3',
+    text: 'Refactoriza',
+    file: 'prueba/EXTRA.md',
+  },
+];
+
 describe('mdLinks', () => {
   it('should be a function', () => {
     expect(typeof mdLinks).toBe('function');
   });
+  it('should return an error if the path does not exist', () => {
+    mdLinks('prueba/EXTRA.md').catch((error) => {
+      expect(error.message).toBe('The path DOES NOT exist');
+    });
+  });
+  it('should return an array of objects if the path exists', () => {
+    mdLinks('prueba/EXTRA.md').then((arrLinks) => {
+      expect(arrLinks).toStrictEqual(arrayResult);
+    });
+  });
+  it('should return an error if the path is not a file', () => {
+    mdLinks('prueba/prueba.txt').catch((error) => {
+      expect(error.message).toBe('It IS NOT an .md file'.bgRed);
+    });
+  });
 });
-
-// it('should return a promise', () => {
-//   expect(mdLinks()).toBe(typeof Promise);
-// });
-// it('should reject when the path does not exists', () => mdLinks('/doesnotexists.md').then(() => {
-
-//   }).catch((error) => {
-//     expect(error).toBe('The path does not exists');
-//   }));
-// });
