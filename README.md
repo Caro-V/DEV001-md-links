@@ -37,7 +37,7 @@ Se elaboró un diagrama de flujo para organizar la ruta de desarrollo de este pr
 Esta librería es instalable vía `npm install https://github.com/Caro-V/DEV001-md-links.git`
 
 ## 5. Comandos
-El ejecutable de nuestra aplicación se puede ejecutar de la siguiente manera a través de la terminal: `md-links <path-to-file> [options]`
+El ejecutable de esta aplicación se puede ejecutar de la siguiente manera a través de la terminal: `md-links <path-to-file> [options]`
 
 * Si solo se ingresa `md-links`, recibimos un mensaje de bienvenida y la información detallada acerca de los comandos
 ```
@@ -64,7 +64,7 @@ md-links prueba/EXTRA.md --stats
 ![tres](https://i.postimg.cc/k5r3dtG7/Captura-de-pantalla-2023-02-01-a-las-19-37-09.png)
 * Si se ingresa `md-links <path-to-file> --stats --validate` o `md-links <path-to-file> --validate --stats` , obtendremos estadísticas que necesiten de los resultados de la validación.
 ```
-md-links prueba/EXTRA.md --stats
+md-links prueba/EXTRA.md --validate --stats
 ```
 ![cuatro](https://i.postimg.cc/8P5VdSxg/Captura-de-pantalla-2023-02-01-a-las-19-37-33.png)
 
