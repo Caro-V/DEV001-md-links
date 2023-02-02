@@ -37,7 +37,8 @@ Se elaboró un diagrama de flujo para organizar la ruta de desarrollo de este pr
 Esta librería es instalable vía `npm install https://github.com/Caro-V/DEV001-md-links.git`
 
 ## 5. Comandos
-El ejecutable de esta aplicación se puede ejecutar de la siguiente manera a través de la terminal: `md-links <path-to-file> [options]`
+El ejecutable de esta aplicación se puede ejecutar de la siguiente manera a través de la terminal: 
+`md-links <path-to-file> [options]`
 
 * Si solo se ingresa `md-links`, recibimos un mensaje de bienvenida y la información detallada acerca de los comandos
 ```
