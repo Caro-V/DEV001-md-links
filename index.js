@@ -118,7 +118,7 @@ const mdLinks = (inputPath, options = { }) => new Promise((resolve, reject) => {
         if (isItMarkdown(inputPath)) { // si es un archivo y es md, extrae los links
           // console.log('It is a markdown file');
           let content = readFile(inputPath);
-          if (content !== '' && !isItMarkdown(inputPath)) {
+          if (content !== '') {
             const arrayObjects = findLinks(content, inputPath); // si encuentra archivos md, crear un arreglo de mds
             if (arrayObjects !== '' && options.validate) {
               resolve(linkValidation(arrayObjects));
